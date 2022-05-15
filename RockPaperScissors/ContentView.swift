@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    let figures = ["Rock", "Paper", "Scissors"]
-    
-    let winningCombinations = ["Rock": "Paper", "Paper": "Scissors", "Scissors": "Rock"]
+    let figures = ["✊", "✋", "✌️"]
+    let winningCombinations = [0: 1, 1: 2, 2: 0]
     
     @State private var userWin = Bool.random()
     @State private var appChoice = Int.random(in: 0..<3)
@@ -22,24 +21,20 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 Text("Score: \(score)")
-                    .font(.title)
-                Text("I chose \(figures[appChoice])")
                     .font(.headline)
+                Text("My move: \(figures[appChoice])")
+                    .font(.title)
                     .padding(.vertical)
                 Text("You \(userWin ? "WIN" : "LOOSE")")
                     .font(.headline)
                     .padding(.vertical)
-                Text("Make your choice:")
-                    .font(.subheadline)
+                Text("What is your move:")
+                    .font(.title)
                 HStack {
-                    Button("✊") {
-                        updateScore(figure: "Rock")
-                    }
-                    Button("✋") {
-                        updateScore(figure: "Paper")
-                    }
-                    Button("✌️") {
-                        updateScore(figure: "Scissors")
+                    ForEach(0..<figures.count, id:\.self) { userChoice in
+                        Button("\(figures[userChoice])") {
+                            updateScore(figure: userChoice)
+                        }
                     }
                 }
                 .font(.system(size: 80))
@@ -57,7 +52,7 @@ struct ContentView: View {
         }
     }
     
-    func WinOrLoose(appFigure: String, userFigure: String) -> Bool? {
+    func WinOrLoose(appFigure: Int, userFigure: Int) -> Bool? {
         if  appFigure == userFigure {
             return nil
         } else if userFigure == winningCombinations[appFigure] {
@@ -66,15 +61,15 @@ struct ContentView: View {
         return false
     }
     
-    func updateScore(figure: String) {
-        if userWin == WinOrLoose(appFigure: figures[appChoice], userFigure: figure) {
+    func updateScore(figure: Int) {
+        if userWin == WinOrLoose(appFigure: appChoice, userFigure: figure) {
             score += 1
-            count += 1
         }
-        if count < 10 {
-            appChoice = Int.random(in: 0..<3)
-            userWin = Bool.random()
-        } else {
+        count += 1
+        appChoice = Int.random(in: 0..<3)
+        userWin = Bool.random()
+        
+        if count > 9 {
             isShowingAlert = true
         }
     }
