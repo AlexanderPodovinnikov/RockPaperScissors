@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     let figures = ["Rock", "Paper", "Scissors"]
     
-    let winningCombination = ["Rock": "Paper", "Paper": "Scissors", "Scissors": "Rock"]
+    let winningCombinations = ["Rock": "Paper", "Paper": "Scissors", "Scissors": "Rock"]
     
     @State private var userWin = Bool.random()
     @State private var appChoice = Int.random(in: 0..<3)
@@ -60,7 +60,7 @@ struct ContentView: View {
     func WinOrLoose(appFigure: String, userFigure: String) -> Bool? {
         if  appFigure == userFigure {
             return nil
-        } else if userFigure == winningCombination[appFigure] {
+        } else if userFigure == winningCombinations[appFigure] {
             return true
         }
         return false
