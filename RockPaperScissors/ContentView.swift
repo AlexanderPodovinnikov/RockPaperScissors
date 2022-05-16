@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     let figures = ["✊", "✋", "✌️"]
-    let winningCombinations = [0: 1, 1: 2, 2: 0]
+    let winningCombinations = [1, 2, 0]
     
     @State private var userWin = Bool.random()
     @State private var appChoice = Int.random(in: 0..<3)
@@ -25,6 +25,7 @@ struct ContentView: View {
                 Text("My move: \(figures[appChoice])")
                     .font(.title)
                     .padding(.vertical)
+                
                 Text("You \(userWin ? "WIN" : "LOOSE")")
                     .font(.headline)
                     .padding(.vertical)
@@ -52,18 +53,22 @@ struct ContentView: View {
         }
     }
     
-    func WinOrLoose(appFigure: Int, userFigure: Int) -> Bool? {
-        if  appFigure == userFigure {
+    func winOrLoose(userMove: Int) -> Bool? {
+        if  appChoice == userMove {
             return nil
-        } else if userFigure == winningCombinations[appFigure] {
+        } else if userMove == winningCombinations[appChoice] {
             return true
         }
         return false
     }
     
     func updateScore(figure: Int) {
-        if userWin == WinOrLoose(appFigure: appChoice, userFigure: figure) {
-            score += 1
+        if let winOrLoose = winOrLoose(userMove: figure) {
+            if userWin == winOrLoose {
+                score += 1
+            } else {
+                score -= 1
+            }
         }
         count += 1
         appChoice = Int.random(in: 0..<3)
@@ -77,8 +82,8 @@ struct ContentView: View {
     func startNewGame() {
         score = 0
         count = 0
-        appChoice = Int.random(in: 0..<3)
-        userWin = Bool.random()
+//        appChoice = Int.random(in: 0..<3)
+//        userWin = Bool.random()
     }
 }
 
